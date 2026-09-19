@@ -9,8 +9,26 @@ Local [Claude Code](https://code.claude.com) configurations I use day to day —
 `~/.claude/settings.json`, or project-level at `.claude/settings.json`) — don't overwrite your
 file blindly. Full field-by-field reference: https://code.claude.com/docs/en/settings-reference.
 
-**Intentionally excluded:** `hooks`, `enabledPlugins`, `extraKnownMarketplaces` — out of scope
-for this file (see `CONTRIBUTING.md`).
+```json
+{
+  "theme": "dark",
+  "model": "sonnet",
+  "spinnerTipsEnabled": false,
+  "autoUpdatesChannel": "stable",
+  "preferredNotifChannel": "terminal_bell",
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "jq -r '\"[\\(.model.display_name)] \\(.context_window.used_percentage // 0)% context\"'",
+    "padding": 2
+  },
+  "plansDirectory": "./.claude/plans"
+}
+```
 
 | Key | What it does |
 |---|---|

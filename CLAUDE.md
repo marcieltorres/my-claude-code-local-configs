@@ -4,9 +4,7 @@ Instructions for AI agents working in this repository.
 
 ## What this repo is
 
-A place to share and document local Claude Code configurations (`settings.json`,
-`PreToolUse` hooks, and the reasoning behind each decision). There is no application,
-server, or library here — the content is configuration and documentation.
+A place to share and document local Claude Code configurations (`settings.json`, `PreToolUse` hooks, and the reasoning behind each decision). There is no application, server, or library here — the content is configuration and documentation.
 
 ## Where things live
 
@@ -22,8 +20,7 @@ Never commit to this repo:
 - URLs of private repositories or internal company/organization names
 - Anything coming from `.claude/settings.local.json` (it's local by definition)
 
-Before proposing a change to any example config file, double-check that nothing
-personal or machine-specific leaked in.
+Before proposing a change to any example config file, double-check that nothing personal or machine-specific leaked in.
 
 ## Contribution flow
 
@@ -36,16 +33,12 @@ personal or machine-specific leaked in.
 
 Rules live inside `.claude/hooks/pre_tool_use.py`, one function per rule:
 
-1. Write `check_<name>(tool_name, tool_input, cwd) -> str | None` — return a reason string to
-   block, or `None` to allow.
+1. Write `check_<name>(tool_name, tool_input, cwd) -> str | None` — return a reason string to block, or `None` to allow.
 2. Append it to the `RULES` list at the bottom of the file.
 3. Add at least one blocking case and one passing case to `tests/test_pre_tool_use.py`.
 4. Run `python3 tests/test_pre_tool_use.py` before opening the PR.
 
-Do not create a new file per rule, and do not add a rules registry/package for this — the
-convention here is one script per hook event, with rules as functions inside it. Each rule
-must fail open (never raise past its own `check_*` call) — `main()` already wraps each rule
-in `try/except`, so a broken rule can't block unrelated work.
+Do not create a new file per rule, and do not add a rules registry/package for this — the convention here is one script per hook event, with rules as functions inside it. Each rule must fail open (never raise past its own `check_*` call) — `main()` already wraps each rule in `try/except`, so a broken rule can't block unrelated work.
 
 ## Style
 

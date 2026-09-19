@@ -4,10 +4,7 @@ Local [Claude Code](https://code.claude.com) configurations I use day to day —
 
 ## Settings
 
-[`.claude/settings.example.json`](.claude/settings.example.json) is a sanitized copy of the
-`settings.json` I use. Copy the keys you want into your own `settings.json` (global at
-`~/.claude/settings.json`, or project-level at `.claude/settings.json`) — don't overwrite your
-file blindly. Full field-by-field reference: https://code.claude.com/docs/en/settings-reference.
+[`.claude/settings.example.json`](.claude/settings.example.json) is a sanitized copy of the `settings.json` I use. Copy the keys you want into your own `settings.json` (global at `~/.claude/settings.json`, or project-level at `.claude/settings.json`) — don't overwrite your file blindly. Full field-by-field reference: https://code.claude.com/docs/en/settings-reference.
 
 ```json
 {
@@ -60,15 +57,11 @@ file blindly. Full field-by-field reference: https://code.claude.com/docs/en/set
 | `plansDirectory` | Where plan mode writes plan files. |
 | `hooks` | Shell commands Claude Code runs around tool calls — see [Hooks](#hooks) below. |
 
-*Note: whether Claude Code expands `$HOME` in the `hooks[].hooks[].command` field is
-unverified — if it doesn't, use an absolute path instead.*
+*Note: whether Claude Code expands `$HOME` in the `hooks[].hooks[].command` field is unverified — if it doesn't, use an absolute path instead.*
 
 ## Hooks
 
-Claude Code hooks are scripts that run around tool calls and session lifecycle events. Every
-hook here follows the same shape: a small, dependency-free Python script that reads a JSON
-payload from stdin and decides whether to allow, block, or stay silent — one script per hook
-event, with rules as plain functions inside it (never one file per rule).
+Claude Code hooks are scripts that run around tool calls and session lifecycle events. Every hook here follows the same shape: a small, dependency-free Python script that reads a JSON payload from stdin and decides whether to allow, block, or stay silent — one script per hook event, with rules as plain functions inside it (never one file per rule).
 
 ### Available hooks
 
@@ -87,8 +80,7 @@ More events (`PostToolUse`, `SessionStart`, ...) get their own row here as they'
 
 ### `pre_tool_use.py`
 
-Runs before every tool call. Rules are functions inside the script, checked in order; the
-first one that returns a reason wins.
+Runs before every tool call. Rules are functions inside the script, checked in order; the first one that returns a reason wins.
 
 | Rule | Blocks |
 |---|---|
@@ -96,27 +88,21 @@ first one that returns a reason wins.
 
 ### Install
 
-1. Copy the hook script(s) you want to `~/.claude/hooks/` (global) or your project's
-   `.claude/hooks/` (project-scoped)
+1. Copy the hook script(s) you want to `~/.claude/hooks/` (global) or your project's `.claude/hooks/` (project-scoped)
 2. `chmod +x` them
-3. Add the matching entry from the `hooks` block in `.claude/settings.example.json` to your
-   own `settings.json`
+3. Add the matching entry from the `hooks` block in `.claude/settings.example.json` to your own `settings.json`
 4. Restart your Claude Code session — hooks are only read at session start
 
 ### Adding a new rule or hook
 
-- **New rule for an existing hook:** write `check_<name>(tool_name, tool_input, cwd) -> str | None`
-  inside that hook's script and append it to its `RULES` list.
-- **New hook event:** add a new script (e.g. `post_tool_use.py`) following the same contract,
-  and add a row for it in the tables above.
+- **New rule for an existing hook:** write `check_<name>(tool_name, tool_input, cwd) -> str | None` inside that hook's script and append it to its `RULES` list.
+- **New hook event:** add a new script (e.g. `post_tool_use.py`) following the same contract, and add a row for it in the tables above.
 
 See `CONTRIBUTING.md` for the full steps, including tests.
 
 ### Limitations
 
-This is a guard-rail against carelessness, not a sandbox. Detection is syntactic — each hook
-inspects the payload Claude is about to act on, so sufficiently indirect actions aren't
-caught. It also only affects Claude's own tool calls, not your terminal.
+This is a guard-rail against carelessness, not a sandbox. Detection is syntactic — each hook inspects the payload Claude is about to act on, so sufficiently indirect actions aren't caught. It also only affects Claude's own tool calls, not your terminal.
 
 ## Links
 
@@ -127,5 +113,4 @@ caught. It also only affects Claude's own tool calls, not your terminal.
 
 ---
 
-The hooks structure in this repo is inspired by
-[claude-code-hooks-mastery](https://github.com/disler/claude-code-hooks-mastery).
+The hooks structure in this repo is inspired by [claude-code-hooks-mastery](https://github.com/disler/claude-code-hooks-mastery).

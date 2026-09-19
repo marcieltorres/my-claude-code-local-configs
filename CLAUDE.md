@@ -29,8 +29,7 @@ personal or machine-specific leaked in.
 
 1. Open an issue before any PR (see `CONTRIBUTING.md`)
 2. Follow `.github/PULL_REQUEST_TEMPLATE`
-3. CI (`.github/workflows/pull_request.yml`) must pass — it validates that the repo's
-   `.json` files are valid JSON and runs `tests/test_pre_tool_use.py`
+3. CI (`.github/workflows/pull_request.yml`) must pass — it runs tests and validations
 4. Commits follow Conventional Commits, no AI attribution
 
 ## Adding a new PreToolUse rule

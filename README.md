@@ -85,6 +85,7 @@ Runs before every tool call. Rules are functions inside the script, checked in o
 | Rule | Blocks |
 |---|---|
 | `check_no_commit_on_main` | `git commit` — direct or indirect (`&&`, `-C`, `-c`, `--git-dir`, `--work-tree`) — when the current branch is `main` or `master` |
+| `check_no_terraform_apply_or_destroy` | `terraform apply` / `terraform destroy` — direct or indirect (`&&`, leading flags like `-chdir=...`) — regardless of branch |
 
 ### Install
 

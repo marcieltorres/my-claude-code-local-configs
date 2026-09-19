@@ -1,0 +1,21 @@
+name: pull_request
+permissions:
+  contents: read
+on: [pull_request]
+jobs:
+  validate_json:
+    name: "Validate JSON files"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Validate every .json file
+        run: |
+          set -euo pipefail
+          status=0
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            python3 -m json.tool "$file" > /dev/null || status=1
+          done < <(find . -name '*.json' -not -path './.git/*' -print0)
+          exit $status

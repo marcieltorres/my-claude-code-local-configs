@@ -1,6 +1,6 @@
 # my-claude-code-local-configs
 
-Configurações locais do [Claude Code](https://code.claude.com) que uso no dia a dia — compartilhadas e documentadas para referência.
+Local [Claude Code](https://code.claude.com) configurations I use day to day — shared and documented for reference.
 
 ## Links
 

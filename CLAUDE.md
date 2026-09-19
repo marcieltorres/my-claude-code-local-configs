@@ -1,41 +1,41 @@
 # CLAUDE.md
 
-Instruções para agentes de IA trabalhando neste repositório.
+Instructions for AI agents working in this repository.
 
-## O que este repo é
+## What this repo is
 
-Um lugar para compartilhar e documentar configurações locais do Claude Code (`settings.json`,
-hooks de `PreToolUse`, e o racional por trás de cada decisão). Não há aplicação, servidor ou
-biblioteca aqui — o conteúdo é configuração e documentação.
+A place to share and document local Claude Code configurations (`settings.json`,
+`PreToolUse` hooks, and the reasoning behind each decision). There is no application,
+server, or library here — the content is configuration and documentation.
 
-## Onde as coisas ficam
+## Where things live
 
-- `settings.example.json` — versão sanitizada do `settings.json` real, pra copiar/adaptar
-- `.claude/hooks/` — scripts de hook versionados (quando existirem)
-- `.claude/plans/ideia.md` — ideia em avaliação para uma engine de regras de hook mais robusta
-  (repo separado, Python stdlib). **Não implementar a partir dela sem confirmação explícita** —
-  é uma ideia futura, não uma tarefa aprovada.
+- `settings.example.json` — sanitized version of the real `settings.json`, ready to copy/adapt
+- `.claude/hooks/` — versioned hook scripts (once they exist)
+- `.claude/plans/ideia.md` — an idea under evaluation for a more robust hook rules engine
+  (separate repo, Python stdlib). **Do not implement from it without explicit confirmation** —
+  it's a future idea, not an approved task.
 
-## Regra de sanitização (a mais importante)
+## Sanitization rule (the most important one)
 
-Nunca commitar neste repo:
-- Tokens, chaves de API, credenciais
-- Caminhos absolutos específicos de uma máquina (`/Users/<nome>/...`)
-- URLs de repositórios privados ou nomes internos de empresa/organização
-- Qualquer coisa vinda de `.claude/settings.local.json` (é local por definição)
+Never commit to this repo:
+- Tokens, API keys, credentials
+- Machine-specific absolute paths (`/Users/<name>/...`)
+- URLs of private repositories or internal company/organization names
+- Anything coming from `.claude/settings.local.json` (it's local by definition)
 
-Antes de propor uma mudança em qualquer arquivo de config de exemplo, revisar se algo
-pessoal/específico de máquina não vazou.
+Before proposing a change to any example config file, double-check that nothing
+personal or machine-specific leaked in.
 
-## Fluxo de contribuição
+## Contribution flow
 
-1. Abrir uma issue antes de qualquer PR (ver `CONTRIBUTING.md`)
-2. Seguir o `.github/PULL_REQUEST_TEMPLATE`
-3. CI (`.github/workflows/pull_request.yml`) precisa passar — hoje só valida que os `.json`
-   do repo são JSON válido
-4. Commits em Conventional Commits, sem atribuição de IA
+1. Open an issue before any PR (see `CONTRIBUTING.md`)
+2. Follow `.github/PULL_REQUEST_TEMPLATE`
+3. CI (`.github/workflows/pull_request.yml`) must pass — today it only validates that the
+   repo's `.json` files are valid JSON
+4. Commits follow Conventional Commits, no AI attribution
 
-## Estilo
+## Style
 
-- Markdown e JSON com indentação de 2 espaços (ver `.editorconfig`)
-- Nada de comentário `//` em `.json` — não é JSON válido
+- Markdown and JSON use 2-space indentation (see `.editorconfig`)
+- No `//` comments in `.json` — that's not valid JSON

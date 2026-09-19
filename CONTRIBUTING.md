@@ -1,43 +1,43 @@
 # Contributing [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-Obrigado por considerar contribuir. Leia com calma antes de abrir uma issue ou PR.
+Thanks for considering contributing. Please read carefully before opening an issue or PR.
 
-## O que este repo é
+## What this repo is
 
-Um lugar para compartilhar e documentar configurações locais do [Claude Code](https://code.claude.com) — `settings.json`, hooks de `PreToolUse`, e as decisões por trás delas. Não é uma biblioteca nem um serviço; é configuração e documentação.
+A place to share and document local [Claude Code](https://code.claude.com) configurations — `settings.json`, `PreToolUse` hooks, and the decisions behind them. It's not a library or a service; it's configuration and documentation.
 
-## O que é aceito como contribuição
+## What's accepted as a contribution
 
-- Correções ou melhorias nas configs de exemplo (`settings.example.json`)
-- Novas regras de hook, ou melhorias nas existentes
-- Correções e melhorias na documentação
-- Relato de problema ao usar as configs deste repo em outra máquina/setup
+- Fixes or improvements to the example configs (`settings.example.json`)
+- New hook rules, or improvements to existing ones
+- Fixes and improvements to the documentation
+- Reports of issues using these configs on a different machine/setup
 
-## Antes de abrir um PR
+## Before opening a PR
 
-Abra uma issue primeiro. Qualquer mudança precisa ser discutida antes — isso evita retrabalho.
+Open an issue first. Any change needs to be discussed before proceeding — this avoids rework.
 
-## Regra de sanitização
+## Sanitization rule
 
-**Nunca commite dado real de máquina ou de empresa.** Isso inclui:
+**Never commit real machine or company data.** This includes:
 
-- Tokens, chaves de API, credenciais
-- Caminhos absolutos específicos de uma máquina (`/Users/<nome>/...`)
-- URLs de repositórios privados, nomes internos de organização/empresa
-- Qualquer coisa de `.claude/settings.local.json` (esse arquivo é local por definição — nunca deveria estar versionado)
+- Tokens, API keys, credentials
+- Machine-specific absolute paths (`/Users/<name>/...`)
+- URLs of private repositories, internal organization/company names
+- Anything from `.claude/settings.local.json` (that file is local by definition — it should never be versioned)
 
-Configs de exemplo devem ser genéricas o suficiente para qualquer pessoa copiar e adaptar.
+Example configs must be generic enough for anyone to copy and adapt.
 
-## Convenção de commit
+## Commit convention
 
-[Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`). Sem `Co-Authored-By` de ferramentas de IA — o commit é seu.
+[Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`). No `Co-Authored-By` from AI tools — the commit is yours.
 
-## Onde entender as decisões
+## Where to understand the decisions
 
-O racional por trás dos hooks (contrato de regra, formato de saída, limites conhecidos) está documentado em `.claude/plans/ideia.md` — é uma ideia em avaliação, ainda não implementada neste repo.
+The reasoning behind the hooks (rule contract, output format, known limits) is documented in `.claude/plans/ideia.md` — it's an idea under evaluation, not yet implemented in this repo.
 
-## Checklist antes do PR
+## Checklist before the PR
 
-- [ ] Nenhum dado sensível ou específico de máquina/empresa foi commitado
-- [ ] Se mudou `settings.example.json`, validei com `python3 -m json.tool settings.example.json`
-- [ ] Referenciei a issue relacionada no PR (`closes #XXXX`)
+- [ ] No sensitive or machine/company-specific data was committed
+- [ ] If you changed `settings.example.json`, validate it with `python3 -m json.tool settings.example.json`
+- [ ] Referenced the related issue in the PR (`closes #XXXX`)

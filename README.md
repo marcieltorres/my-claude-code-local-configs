@@ -65,34 +65,58 @@ unverified — if it doesn't, use an absolute path instead.*
 
 ## Hooks
 
-[`.claude/hooks/pre_tool_use.py`](.claude/hooks/pre_tool_use.py) is a `PreToolUse` hook: a
-script Claude Code runs before every tool call, that can allow, block, or stay silent.
+Claude Code hooks are scripts that run around tool calls and session lifecycle events. Every
+hook here follows the same shape: a small, dependency-free Python script that reads a JSON
+payload from stdin and decides whether to allow, block, or stay silent — one script per hook
+event, with rules as plain functions inside it (never one file per rule).
 
-**Contract:**
-- Claude Code sends the tool call as JSON on stdin (`tool_name`, `tool_input`, `cwd`, ...)
+### Available hooks
+
+| Event | Script | Purpose |
+|---|---|---|
+| `PreToolUse` | [`pre_tool_use.py`](.claude/hooks/pre_tool_use.py) | Runs before a tool call; can block it |
+
+More events (`PostToolUse`, `SessionStart`, ...) get their own row here as they're added.
+
+### Contract
+
+- Claude Code sends the event payload as JSON on stdin (`tool_name`, `tool_input`, `cwd`, ...)
 - Exit code `0` → allow, no opinion
-- Exit code `2` → block the tool call; whatever was printed to stderr is shown to Claude as
-  the reason
-- A rule that raises an exception fails open — it's skipped, never blocks unrelated work
+- Exit code `2` → block; whatever was printed to stderr is shown to Claude as the reason
+- A rule that raises an exception fails open — it's skipped, it never blocks unrelated work
 
-**Current rule:** `check_no_commit_on_main` — blocks `git commit` when the current branch is
-`main` or `master` (including indirect forms like `git add . && git commit ...` or
-`git -C . commit ...`).
+### `pre_tool_use.py`
 
-**Install:**
-1. Copy `.claude/hooks/pre_tool_use.py` to `~/.claude/hooks/` (global) or your project's
+Runs before every tool call. Rules are functions inside the script, checked in order; the
+first one that returns a reason wins.
+
+| Rule | Blocks |
+|---|---|
+| `check_no_commit_on_main` | `git commit` — direct or indirect (`&&`, `-C`, `-c`, `--git-dir`, `--work-tree`) — when the current branch is `main` or `master` |
+
+### Install
+
+1. Copy the hook script(s) you want to `~/.claude/hooks/` (global) or your project's
    `.claude/hooks/` (project-scoped)
-2. `chmod +x` it
-3. Add the `hooks` block from `.claude/settings.example.json` above to your own `settings.json`
+2. `chmod +x` them
+3. Add the matching entry from the `hooks` block in `.claude/settings.example.json` to your
+   own `settings.json`
 4. Restart your Claude Code session — hooks are only read at session start
 
-**Adding a new rule:** write a function `check_<name>(tool_name, tool_input, cwd) -> str | None`
-in `pre_tool_use.py` and append it to the `RULES` list. See `CONTRIBUTING.md` for the full
-steps, including tests.
+### Adding a new rule or hook
 
-**Limitations:** this is a guard-rail against carelessness, not a sandbox — the detection is
-syntactic (it inspects the command Claude is about to run), so sufficiently indirect commands
-aren't caught. It also only affects Claude's own `Bash` tool calls, not your terminal.
+- **New rule for an existing hook:** write `check_<name>(tool_name, tool_input, cwd) -> str | None`
+  inside that hook's script and append it to its `RULES` list.
+- **New hook event:** add a new script (e.g. `post_tool_use.py`) following the same contract,
+  and add a row for it in the tables above.
+
+See `CONTRIBUTING.md` for the full steps, including tests.
+
+### Limitations
+
+This is a guard-rail against carelessness, not a sandbox. Detection is syntactic — each hook
+inspects the payload Claude is about to act on, so sufficiently indirect actions aren't
+caught. It also only affects Claude's own tool calls, not your terminal.
 
 ## Links
 

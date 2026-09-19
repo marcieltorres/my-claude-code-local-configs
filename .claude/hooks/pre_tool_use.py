@@ -18,6 +18,7 @@ import sys
 PROTECTED_BRANCHES = {"main", "master"}
 SEPARATORS = {"&&", "||", ";", "|"}
 FLAGS_WITH_VALUE = {"-C", "-c", "--git-dir", "--work-tree"}
+TERRAFORM_DESTRUCTIVE_SUBCOMMANDS = {"apply", "destroy"}
 
 
 def split_on_separators(tokens):
@@ -60,6 +61,29 @@ def command_has_git_commit(command):
     return any(is_git_commit_invocation(segment) for segment in split_on_separators(tokens))
 
 
+def is_terraform_destructive_invocation(segment):
+    """Check whether a token segment is a `terraform apply`/`terraform destroy` invocation."""
+    if not segment or segment[0] != "terraform":
+        return False
+    i = 1
+    while i < len(segment):
+        arg = segment[i]
+        if arg.startswith("-"):
+            i += 1
+            continue
+        return arg in TERRAFORM_DESTRUCTIVE_SUBCOMMANDS
+    return False
+
+
+def command_has_terraform_destructive(command):
+    """Check whether any segment of a shell command is a terraform apply/destroy invocation."""
+    try:
+        tokens = shlex.split(command)
+    except ValueError:
+        return False
+    return any(is_terraform_destructive_invocation(segment) for segment in split_on_separators(tokens))
+
+
 def get_current_branch(cwd):
     """Return the current git branch name for cwd, or None if it can't be determined."""
     try:
@@ -95,7 +119,22 @@ def check_no_commit_on_main(tool_name, tool_input, cwd):
     )
 
 
-RULES = [check_no_commit_on_main]
+def check_no_terraform_apply_or_destroy(tool_name, tool_input, cwd):
+    """Block `terraform apply` and `terraform destroy`, regardless of branch."""
+    if tool_name != "Bash":
+        return None
+
+    command = tool_input.get("command", "")
+    if not command or not command_has_terraform_destructive(command):
+        return None
+
+    return (
+        "`terraform apply`/`terraform destroy` is blocked by hook. "
+        "Run it manually outside of Claude Code, with explicit review."
+    )
+
+
+RULES = [check_no_commit_on_main, check_no_terraform_apply_or_destroy]
 
 
 def main():

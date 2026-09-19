@@ -32,10 +32,6 @@ Example configs must be generic enough for anyone to copy and adapt.
 
 [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`). No `Co-Authored-By` from AI tools — the commit is yours.
 
-## Where to understand the decisions
-
-The reasoning behind the hooks (rule contract, output format, known limits) is documented in `.claude/plans/ideia.md` — it's an idea under evaluation, not yet implemented in this repo.
-
 ## Checklist before the PR
 
 - [ ] No sensitive or machine/company-specific data was committed

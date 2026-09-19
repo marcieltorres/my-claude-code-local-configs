@@ -40,6 +40,7 @@ Example configs must be generic enough for anyone to copy and adapt.
 2. Add it to the `RULES` list.
 3. Add test cases (at least one blocking, one passing) to `tests/test_pre_tool_use.py`.
 4. Run `python3 tests/test_pre_tool_use.py` — it must pass before opening the PR.
+5. Document the rule in `README.md`'s rule table for that hook — every rule needs a row describing what it blocks.
 
 Keep the one-script-per-event convention — no new file, no rules package, no changes to `settings.example.json` needed for a new rule (only for a new hook event like `PostToolUse`).
 
@@ -48,4 +49,5 @@ Keep the one-script-per-event convention — no new file, no rules package, no c
 - [ ] No sensitive or machine/company-specific data was committed
 - [ ] If you changed `.claude/settings.example.json`, validate it with `python3 -m json.tool .claude/settings.example.json`
 - [ ] If you changed a hook, run its test file in `tests/` (e.g. `python3 tests/test_pre_tool_use.py` for `.claude/hooks/pre_tool_use.py`)
+- [ ] If you added a new hook rule, documented it in `README.md`'s rule table
 - [ ] Referenced the related issue in the PR (`closes #XXXX`)

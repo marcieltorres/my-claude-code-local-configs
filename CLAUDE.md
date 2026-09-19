@@ -37,6 +37,7 @@ Rules live inside `.claude/hooks/pre_tool_use.py`, one function per rule:
 2. Append it to the `RULES` list at the bottom of the file.
 3. Add at least one blocking case and one passing case to `tests/test_pre_tool_use.py`.
 4. Run `python3 tests/test_pre_tool_use.py` before opening the PR.
+5. Document the rule in `README.md`'s rule table for that hook (e.g. the `pre_tool_use.py` section) — every rule needs a row describing what it blocks.
 
 Do not create a new file per rule, and do not add a rules registry/package for this — the convention here is one script per hook event, with rules as functions inside it. Each rule must fail open (never raise past its own `check_*` call) — `main()` already wraps each rule in `try/except`, so a broken rule can't block unrelated work.
 

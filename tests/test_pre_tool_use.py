@@ -22,6 +22,12 @@ CASES = [
     ("git log", "main", 0),
     ('echo "git commit" > f.txt', "main", 0),
     ("git commit -m \"x\"", "feature/x", 0),
+    ("terraform apply", "main", 2),
+    ("terraform destroy -auto-approve", "main", 2),
+    ("terraform -chdir=infra apply", "main", 2),
+    ("terraform apply", "feature/x", 2),
+    ("terraform plan", "main", 0),
+    ('echo "terraform apply"', "main", 0),
 ]
 
 

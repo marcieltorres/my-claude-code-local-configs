@@ -12,9 +12,6 @@ server, or library here — the content is configuration and documentation.
 
 - `settings.example.json` — sanitized version of the real `settings.json`, ready to copy/adapt
 - `.claude/hooks/` — versioned hook scripts (once they exist)
-- `.claude/plans/ideia.md` — an idea under evaluation for a more robust hook rules engine
-  (separate repo, Python stdlib). **Do not implement from it without explicit confirmation** —
-  it's a future idea, not an approved task.
 
 ## Sanitization rule (the most important one)
 

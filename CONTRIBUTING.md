@@ -32,8 +32,23 @@ Example configs must be generic enough for anyone to copy and adapt.
 
 [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`). No `Co-Authored-By` from AI tools — the commit is yours.
 
+## Adding a new hook rule
+
+`.claude/hooks/pre_tool_use.py` follows a simple contract: each rule is a function
+`check_<name>(tool_name, tool_input, cwd)` that returns a reason string to block the tool
+call, or `None` to allow it. To add one:
+
+1. Write the `check_<name>` function in `pre_tool_use.py`.
+2. Add it to the `RULES` list.
+3. Add test cases (at least one blocking, one passing) to `tests/test_pre_tool_use.py`.
+4. Run `python3 tests/test_pre_tool_use.py` — it must pass before opening the PR.
+
+Keep the one-script-per-event convention — no new file, no rules package, no changes to
+`settings.example.json` needed for a new rule (only for a new hook event like `PostToolUse`).
+
 ## Checklist before the PR
 
 - [ ] No sensitive or machine/company-specific data was committed
-- [ ] If you changed `settings.example.json`, validate it with `python3 -m json.tool settings.example.json`
+- [ ] If you changed `.claude/settings.example.json`, validate it with `python3 -m json.tool .claude/settings.example.json`
+- [ ] If you changed a hook, run `python3 tests/test_pre_tool_use.py`
 - [ ] Referenced the related issue in the PR (`closes #XXXX`)

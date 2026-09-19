@@ -26,7 +26,21 @@ file blindly. Full field-by-field reference: https://code.claude.com/docs/en/set
     "command": "jq -r '\"[\\(.model.display_name)] \\(.context_window.used_percentage // 0)% context\"'",
     "padding": 2
   },
-  "plansDirectory": "./.claude/plans"
+  "plansDirectory": "./.claude/plans",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/pre_tool_use.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
@@ -44,6 +58,41 @@ file blindly. Full field-by-field reference: https://code.claude.com/docs/en/set
 | `statusLine.command` | Shell command that renders the status line; receives session JSON on stdin. |
 | `statusLine.padding` | Left padding (in spaces) applied to the rendered status line. |
 | `plansDirectory` | Where plan mode writes plan files. |
+| `hooks` | Shell commands Claude Code runs around tool calls — see [Hooks](#hooks) below. |
+
+*Note: whether Claude Code expands `$HOME` in the `hooks[].hooks[].command` field is
+unverified — if it doesn't, use an absolute path instead.*
+
+## Hooks
+
+[`.claude/hooks/pre_tool_use.py`](.claude/hooks/pre_tool_use.py) is a `PreToolUse` hook: a
+script Claude Code runs before every tool call, that can allow, block, or stay silent.
+
+**Contract:**
+- Claude Code sends the tool call as JSON on stdin (`tool_name`, `tool_input`, `cwd`, ...)
+- Exit code `0` → allow, no opinion
+- Exit code `2` → block the tool call; whatever was printed to stderr is shown to Claude as
+  the reason
+- A rule that raises an exception fails open — it's skipped, never blocks unrelated work
+
+**Current rule:** `check_no_commit_on_main` — blocks `git commit` when the current branch is
+`main` or `master` (including indirect forms like `git add . && git commit ...` or
+`git -C . commit ...`).
+
+**Install:**
+1. Copy `.claude/hooks/pre_tool_use.py` to `~/.claude/hooks/` (global) or your project's
+   `.claude/hooks/` (project-scoped)
+2. `chmod +x` it
+3. Add the `hooks` block from `.claude/settings.example.json` above to your own `settings.json`
+4. Restart your Claude Code session — hooks are only read at session start
+
+**Adding a new rule:** write a function `check_<name>(tool_name, tool_input, cwd) -> str | None`
+in `pre_tool_use.py` and append it to the `RULES` list. See `CONTRIBUTING.md` for the full
+steps, including tests.
+
+**Limitations:** this is a guard-rail against carelessness, not a sandbox — the detection is
+syntactic (it inspects the command Claude is about to run), so sufficiently indirect commands
+aren't caught. It also only affects Claude's own `Bash` tool calls, not your terminal.
 
 ## Links
 
@@ -51,3 +100,8 @@ file blindly. Full field-by-field reference: https://code.claude.com/docs/en/set
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
 - [License](LICENSE)
+
+---
+
+The hooks structure in this repo is inspired by
+[claude-code-hooks-mastery](https://github.com/disler/claude-code-hooks-mastery).

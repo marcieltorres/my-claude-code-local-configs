@@ -3,8 +3,8 @@ permissions:
   contents: read
 on: [pull_request]
 jobs:
-  validate_json:
-    name: "Validate JSON files"
+  validate:
+    name: "Validate configs and hooks"
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -19,3 +19,6 @@ jobs:
             python3 -m json.tool "$file" > /dev/null || status=1
           done < <(find . -name '*.json' -not -path './.git/*' -print0)
           exit $status
+
+      - name: Run hook tests
+        run: python3 tests/test_pre_tool_use.py

@@ -50,5 +50,5 @@ Keep the one-script-per-event convention — no new file, no rules package, no c
 
 - [ ] No sensitive or machine/company-specific data was committed
 - [ ] If you changed `.claude/settings.example.json`, validate it with `python3 -m json.tool .claude/settings.example.json`
-- [ ] If you changed a hook, run `python3 tests/test_pre_tool_use.py`
+- [ ] If you changed a hook, run its test file in `tests/` (e.g. `python3 tests/test_pre_tool_use.py` for `.claude/hooks/pre_tool_use.py`)
 - [ ] Referenced the related issue in the PR (`closes #XXXX`)
